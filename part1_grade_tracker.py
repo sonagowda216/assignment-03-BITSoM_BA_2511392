@@ -156,6 +156,56 @@ def compute_class_statistics(students):
 
 
 # ============================================================================
+# TASK 3: CLASS PERFORMANCE SUMMARY (7 marks)
+# ============================================================================
+
+
+def task3_class_performance(class_data):
+    """
+    Given class_data as a list of tuples (name, marks_list), compute and print:
+    - Average per student (2 decimals)
+    - Status: Pass if average >= 60 else Fail
+    - Formatted table
+    - Number of pass/fail, class topper and class average
+    """
+    rows = []
+    for name, marks in class_data:
+        avg = round(sum(marks) / len(marks), 2) if marks else 0.0
+        status = "Pass" if avg >= 60 else "Fail"
+        rows.append((name, avg, status))
+
+    # Print formatted table
+    print("\n" + "=" * 50)
+    print("TASK 3 — Class Performance Summary")
+    print("=" * 50)
+    print(f"{'Name':25} | {'Average':7} | {'Status'}")
+    print('-' * 50)
+    for name, avg, status in rows:
+        print(f"{name:25} | {avg:7.2f} | {status}")
+
+    # Post-table metrics
+    pass_count = sum(1 for _, avg, s in rows if s == 'Pass')
+    fail_count = sum(1 for _, avg, s in rows if s == 'Fail')
+    topper = max(rows, key=lambda r: r[1]) if rows else (None, None, None)
+    class_avg = round(sum(r[1] for r in rows) / len(rows), 2) if rows else 0.0
+
+    print("\nSummary:")
+    print(f"Passed students : {pass_count}")
+    print(f"Failed students : {fail_count}")
+    if topper and topper[0]:
+        print(f"Class topper    : {topper[0]} -> {topper[1]:.2f}")
+    print(f"Class average   : {class_avg:.2f}")
+
+    return {
+        'rows': rows,
+        'passed': pass_count,
+        'failed': fail_count,
+        'topper': topper,
+        'class_average': class_avg,
+    }
+
+
+# ============================================================================
 # TASK 2: MARKS ANALYSIS (loops + conditionals) - integrated for submission
 # ============================================================================
 

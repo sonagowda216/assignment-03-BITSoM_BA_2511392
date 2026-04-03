@@ -156,6 +156,97 @@ def compute_class_statistics(students):
 
 
 # ============================================================================
+# TASK 2: MARKS ANALYSIS (loops + conditionals) - integrated for submission
+# ============================================================================
+
+
+def grade_label(mark: int) -> str:
+    if 90 <= mark <= 100:
+        return "A+"
+    if 80 <= mark <= 89:
+        return "A"
+    if 70 <= mark <= 79:
+        return "B"
+    if 60 <= mark <= 69:
+        return "C"
+    if 0 <= mark <= 59:
+        return "F"
+    return "Invalid"
+
+
+def print_subjects_with_grades(subjects, marks):
+    for subj, mark in zip(subjects, marks):
+        print(f"{subj:12} : {mark:3} -> {grade_label(mark)}")
+
+
+def compute_total_avg_high_low(subjects, marks):
+    total = sum(marks)
+    avg = round(total / len(marks), 2) if marks else 0.0
+    max_idx = marks.index(max(marks)) if marks else None
+    min_idx = marks.index(min(marks)) if marks else None
+
+    highest = (subjects[max_idx], marks[max_idx]) if max_idx is not None else (None, None)
+    lowest = (subjects[min_idx], marks[min_idx]) if min_idx is not None else (None, None)
+
+    return {
+        "total": total,
+        "average": avg,
+        "highest": highest,
+        "lowest": lowest,
+    }
+
+
+def interactive_marks_entry(subjects, marks, simulation=None):
+    """
+    While-loop based marks entry. If `simulation` provided, it should be a list
+    of tuples (subject, mark_or_str) to drive the loop non-interactively.
+    """
+    new_count = 0
+    sim_iter = iter(simulation) if simulation else None
+
+    while True:
+        if sim_iter is not None:
+            try:
+                subj, mark_input = next(sim_iter)
+            except StopIteration:
+                break
+        else:
+            subj = input("Enter subject name (or 'done' to finish): ").strip()
+            mark_input = None
+
+        if isinstance(subj, str) and subj.lower() == "done":
+            break
+
+        if mark_input is None:
+            mark_raw = input(f"Enter marks for '{subj}' (0-100): ").strip()
+        else:
+            mark_raw = str(mark_input)
+
+        try:
+            mark = int(mark_raw)
+            if not (0 <= mark <= 100):
+                print(f"Warning: marks for '{subj}' out of range (0-100). Entry skipped.")
+                continue
+        except ValueError:
+            print(f"Warning: invalid marks input for '{subj}': {mark_raw}. Entry skipped.")
+            continue
+
+        subjects.append(subj)
+        marks.append(mark)
+        new_count += 1
+
+    updated_total = sum(marks)
+    updated_avg = round(updated_total / len(marks), 2) if marks else 0.0
+
+    return {
+        "subjects": subjects,
+        "marks": marks,
+        "new_added": new_count,
+        "updated_average": updated_avg,
+    }
+
+
+# ============================================================================
 # TASK 3: GENERATE SUMMARY REPORT (10 marks)
 # ============================================================================
 
@@ -351,10 +442,39 @@ if __name__ == "__main__":
         print(f"  Maximum: {stats['max']}")
         print(f"  Minimum: {stats['min']}")
     
+    # ------------------
+    # TASK 2: Demonstration (as per assignment screenshot)
+    # ------------------
+    print("\n" + "=" * 50)
+    print("TASK 2 — Marks Analysis Using Loops & Conditionals")
+    print("=" * 50)
+    student_name = "Ayesha Sharma"
+    subjects2 = ["Math", "Physics", "CS", "English", "Chemistry"]
+    marks2 = [88, 72, 95, 60, 78]
+
+    print("\nStudent:", student_name)
+    print_subjects_with_grades(subjects2, marks2)
+
+    results2 = compute_total_avg_high_low(subjects2, marks2)
+    print(f"\nTotal marks     : {results2['total']}")
+    print(f"Average marks   : {results2['average']:.2f}")
+    print(f"Highest subject : {results2['highest'][0]} -> {results2['highest'][1]}")
+    print(f"Lowest subject  : {results2['lowest'][0]} -> {results2['lowest'][1]}")
+
+    simulation = [
+        ("Biology", 82),
+        ("Art", "abc"),     # invalid -> should be skipped with warning
+        ("Geography", 74),
+        ("done", None),
+    ]
+    after = interactive_marks_entry(subjects2[:], marks2[:], simulation=simulation)
+    print(f"\nNew subjects added: {after['new_added']}")
+    print(f"Updated average (original + new): {after['updated_average']:.2f}")
+
     print("\n" + "=" * 50)
     print("EXECUTION COMPLETED SUCCESSFULLY")
     print("=" * 50 + "\n")
-    
+
     # ------------------
     # Task 4: Example usage
     # ------------------

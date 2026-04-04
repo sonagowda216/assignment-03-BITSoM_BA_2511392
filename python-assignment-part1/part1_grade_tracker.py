@@ -56,9 +56,9 @@ for student in raw_students:
         print(f"Marks   | {marks_list}")
         print(f"=============================")
     else:
-        print(f"\n✗ Invalid name: {cleaned_name}")
+        print(f"\n[ERROR] Invalid name: {cleaned_name}")
 
-print(f"\n✓ Cleaned {len(cleaned_students)} student profiles")
+print(f"\n[OK] Cleaned {len(cleaned_students)} student profiles")
 
 
 # ============================================================================

@@ -58,7 +58,7 @@ for student in raw_students:
     else:
         print(f"\n✗ Invalid name: {cleaned_name}")
 
-print(f"\n✓ Successfully cleaned {len(cleaned_students)} student profiles")
+print(f"\n✓ Cleaned {len(cleaned_students)} student profiles")
 
 
 # ============================================================================
@@ -233,5 +233,3 @@ for i, sentence in enumerate(sentences, 1):
         print(f"   {i}. {sentence_clean}.")
 
 print("\n" + "="*70)
-print("ALL TASKS COMPLETED SUCCESSFULLY")
-print("="*70)
